@@ -1,6 +1,6 @@
-import streamlit as st
+import streamlit as st #imports streamlit and changes its reference to st
 from datetime import date
-import pandas as pd
+import pandas as pd # imports panda library and changes its reference to pd
 
 
 
@@ -19,11 +19,16 @@ TODAY = date.today().strftime("%Y-%m-%d")
 
 st.title("Stock Prediction App")
 
-stocks = ("APRE", "AAPL", "GOOG", "MSFT", "GME")
+st.sidebar.write("Example sidebar text") #st.sidebar puts widgets and texts in a sidebar on your page
+
+
+
+
+stocks = ("APRE","AAPL", "GOOG", "MSFT", "GME")
 selected_stocks = st.selectbox("Select dataset for prediction", stocks)
 
-n_years = st.slider("Years of prediction:", 1, 4)
-period = n_years * 365
+#n_years = st.slider("Years of prediction:", 1, 4)
+#period = n_years * 365
 
 @st.cache #caches the data, doesnt need to run this code again if stock has been cached
 def load_data(ticker):
