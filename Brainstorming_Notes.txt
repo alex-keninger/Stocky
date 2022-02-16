@@ -1,2 +1,21 @@
-sd
-sd
+
+Potential Streamlit Components to Use:
+    -See Streamlit documentation @ https://docs.streamlit.io/library/api-reference
+
+Potential Custom Components to Use:
+    - AgGrid - creates a table/like interactive grid that can use checkboxes
+    -----Could be used for stock watchlist
+
+    -Discus - implementss the Disqus application
+    -----Could be used for forum capability to discuss certain stocks
+
+Other Python Packages
+    - Tweepy - Python package for interacting with Twitter
+    -----Could be used to reference tweets about stocks or certain users (ex: a company account)
+
+
+For displaying data, could ask using to select what information they would like to see (Ex: open, close, date)
+and how far back they want to look with text.input boxes and/buttons that create the inputs
+for the table. 
+ 
+For example, a dropdown that selects how far they want to look back (1 week, 1 month, 6 months, 1 year, All time)
