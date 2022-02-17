@@ -70,7 +70,8 @@ st.subheader('Raw data')
 if DateRange == "All Time":
     st.write(data)
 else:
-    st.write(data.tail(DateRange)) 
+    with st.expander("Click to expand"):
+        st.write(data.tail(DateRange)) 
     #creates a table with data entries from yahoo finance
     # tail cuts off the last entries determined by the DateRange
 
