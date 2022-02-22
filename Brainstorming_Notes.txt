@@ -19,3 +19,7 @@ and how far back they want to look with text.input boxes and/buttons that create
 for the table. 
  
 For example, a dropdown that selects how far they want to look back (1 week, 1 month, 6 months, 1 year, All time)
+
+Figure out how to cache data for a watchlist (or allow a temporary watchlist to be created)
+
+Create pages (reference streamlit shorts)
