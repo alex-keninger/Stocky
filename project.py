@@ -98,19 +98,23 @@ elif page == "Watchlist":
     tselected_watch_stock = st.selectbox("TView a stock", st.session_state.twatchlist_stocks[1:]) #shows all stocks in watchlist and excludes the first value (hence the [1:] because it is nothing)
     
     #A button when clicked that clears the watchlist
-    result = st.button("Click to clear your watchlist")
-    if result:
+    tresult = st.button("Click to clear your twatchlist")
+    if tresult:
         for key in st.session_state.keys(): #deletes all the keys saved in session_state
                 del st.session_state[key]
     #st.session_state.twatchlist_stocks = []     
 
 
 st.sidebar.text("")
-st.sidebar.text("Watchlist (Work in Progress)") #st.sidebar puts widgets and texts in a sidebar on your page
+st.sidebar.title("Watchlist") #st.sidebar puts widgets and texts in a sidebar on your page
 
 watchstock = st.sidebar.text_input("Enter a stock to add to watchlist")
 st.session_state.watchlist_stocks.append(watchstock)
 selected_watch_stock = st.sidebar.selectbox("View a stock", st.session_state.watchlist_stocks[1:])
-
+#A button when clicked that clears the watchlist
+result = st.sidebar.button("Click to clear your watchlist")
+if result:
+    for key in st.session_state.keys(): #deletes all the keys saved in session_state
+            del st.session_state[key]
 
 
