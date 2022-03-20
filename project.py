@@ -1,4 +1,3 @@
-from tkinter import W
 import streamlit as st #imports streamlit and changes its reference to st
 from datetime import date
 import pandas as pd # imports panda library and changes its reference to pd
@@ -10,12 +9,11 @@ from plotly import graph_objs as go
 START = "2015-01-01"
 TODAY = date.today().strftime("%Y-%m-%d")
 
-watchlist_stocks = []
-
-if 'twatchlist_stocks' not in st.session_state:
-    st.session_state.twatchlist_stocks = []
 if 'watchlist_stocks' not in st.session_state:
     st.session_state.watchlist_stocks = []
+if 'twatchlist_stocks' not in st.session_state:
+   st.session_state.twatchlist_stocks = []
+
 
 page_names = ["Main Page", "Watchlist"]
 page = st.sidebar.radio('Navigation', page_names)
@@ -69,6 +67,9 @@ if page == "Main Page":
     elif DateRange == "1 year":
         DateRange = 365
 
+    st.title("")
+    st.title("Current stock: ")
+    st.header(selected_stocks)
 
     st.subheader('Raw data')
     if DateRange == "All Time":
@@ -112,9 +113,9 @@ watchstock = st.sidebar.text_input("Enter a stock to add to watchlist")
 st.session_state.watchlist_stocks.append(watchstock)
 selected_watch_stock = st.sidebar.selectbox("View a stock", st.session_state.watchlist_stocks[1:])
 #A button when clicked that clears the watchlist
+watchstock = ""
 result = st.sidebar.button("Click to clear your watchlist")
 if result:
     for key in st.session_state.keys(): #deletes all the keys saved in session_state
             del st.session_state[key]
-
 
