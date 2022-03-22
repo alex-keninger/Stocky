@@ -44,7 +44,6 @@ if page == "Home":
         data.reset_index(inplace=True)
         return data
 
-
     if selected_stocks == "":
         data = load_data("AAPL")
         st.warning("Currently showing data for AAPL. Try inputing your own ticker!")
