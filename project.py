@@ -23,7 +23,7 @@ page = st.sidebar.radio('Navigation', page_names)
 if page == "Home":
     st.write("""
     # CS 460 Stock Analysis Web App
-    # Hello! TESTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+    # Hello! 
     ##### Welcome to STOCKY! 
     This is a free-to-use web application that allows you to
     view real, up-to-date financial information in one convinient location. See raw data, view charts, creates watchlists,
