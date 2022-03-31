@@ -4,9 +4,6 @@ import streamlit as st #imports streamlit and changes its reference to st
 from datetime import date
 import pandas as pd # imports panda library and changes its reference to pd
 import yfinance as yf
-import json
-    #from prophet import Prophet
-    #from prophet.plot import plot_plotly
 from plotly import graph_objs as go
 
 
@@ -44,7 +41,6 @@ if page == "Home":
         data = yf.download(ticker, START, TODAY)
         data.reset_index(inplace=True)
         return data
-
 
     if selected_stocks == "":
         data = load_data("AAPL")
