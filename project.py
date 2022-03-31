@@ -1,33 +1,38 @@
-from tkinter import W
+
+from io import StringIO
 import streamlit as st #imports streamlit and changes its reference to st
 from datetime import date
 import pandas as pd # imports panda library and changes its reference to pd
 import yfinance as yf
+import json
     #from prophet import Prophet
     #from prophet.plot import plot_plotly
 from plotly import graph_objs as go
+
 
 START = "2015-01-01"
 TODAY = date.today().strftime("%Y-%m-%d")
 
 watchlist_stocks = []
 
-if 'twatchlist_stocks' not in st.session_state:
-    st.session_state.twatchlist_stocks = []
-if 'watchlist_stocks' not in st.session_state:
+if 'watchlist_stocks' not in st.session_state:  #initializes the session state for saving watchlist variables
     st.session_state.watchlist_stocks = []
 
-page_names = ["Main Page", "Watchlist"]
+page_names = ["Home", "Watchlist", "Analysis"]
 page = st.sidebar.radio('Navigation', page_names)
 
-if page == "Main Page":
+if page == "Home":
     st.write("""
     # CS 460 Stock Analysis Web App
     # Hello!
-    ##### "Enter a description of the app here"
-    # """)
+    ##### Welcome to STOCKY! 
+    This is a free-to-use web application that allows you to
+    view real, up-to-date financial information in one convinient location. See raw data, view charts, creates watchlists,
+    and more! 
+
+    Created by Alex Keninger and Michael Hoelzer.""")
     
-    st.title("Stock Analyzer")
+    st.title("Stock Analyzer Test")
 
     #stocks = ("APRE","AAPL", "GOOG", "MSFT", "GME")
     selected_stocks = st.text_input("Input stock")
@@ -41,7 +46,6 @@ if page == "Main Page":
         return data
 
 
-    data_load_state = st.text("Load data...")
     if selected_stocks == "":
         data = load_data("AAPL")
         st.warning("Currently showing data for AAPL. Try inputing your own ticker!")
@@ -56,7 +60,6 @@ if page == "Main Page":
             st.error("Please enter a valid ticker")
             break
 
-    data_load_state.text("Loading data...done!")
 
     st.write()
     DateRange = st.selectbox("How far would you like to look back?", ["1 week", "1 month", "3 months", "1 year", "All Time"])
@@ -68,7 +71,6 @@ if page == "Main Page":
         DateRange = 93
     elif DateRange == "1 year":
         DateRange = 365
-
 
     st.subheader('Raw data')
     if DateRange == "All Time":
@@ -90,31 +92,63 @@ if page == "Main Page":
 
 elif page == "Watchlist":
     
-    twatchlist_stocks = []
-    st.warning("Warning: This watchlist is temporary and will only exist as long as this tab is open.")
-    twatchstock = st.text_input("Create a temporary watchlist")
-    st.session_state.twatchlist_stocks.append(twatchstock)
-    
-    tselected_watch_stock = st.selectbox("TView a stock", st.session_state.twatchlist_stocks[1:]) #shows all stocks in watchlist and excludes the first value (hence the [1:] because it is nothing)
-    
+    st.title("Watchlist") #st.sidebar puts widgets and texts in a sidebar on your page
+
+    #Adds stocks to the watchlist and saves them to session state
+    watchstock = st.text_input("Enter a stock to add to watchlist")
+    add_stock = st.checkbox("Check to add stock")
+    if add_stock:
+        st.session_state.watchlist_stocks.append(watchstock)
+        st.warning("If you are done adding your stock, make sure to uncheck the box above")
+
+    selected_watch_stock = st.selectbox("View a stock", st.session_state.watchlist_stocks[1:]) 
+
     #A button when clicked that clears the watchlist
-    tresult = st.button("Click to clear your twatchlist")
-    if tresult:
+    st.title("")
+    result = st.button("Click to clear your watchlist")
+    if result:
         for key in st.session_state.keys(): #deletes all the keys saved in session_state
                 del st.session_state[key]
-    #st.session_state.twatchlist_stocks = []     
+
+    #Downloads watchlist to a text file
+    st.title("")
+    st.download_button('Download your watchlist', str(st.session_state.watchlist_stocks))
+    
+    #Uploads a previously downloaded watchlist
+    st.title("")
+    uploaded_file = st.file_uploader("Upload a previous watchlist")
+    if uploaded_file is not None:
+        # To read file as bytes:
+        bytes_data = uploaded_file.getvalue()
+        st.write(bytes_data)
+
+        # To convert to a string based IO:
+        stringio = StringIO(uploaded_file.getvalue().decode("utf-8"))
+        st.write(stringio)
+
+        # To read file as string:
+        string_data = stringio.read()
+        st.write(string_data)
+
+        # Can be used wherever a "file-like" object is accepted:
+        uploaded_watchlist = pd.read_csv(uploaded_file)
+        for i in uploaded_watchlist:
+            st.session_state.watchlist_stocks.append(i)
+        st.write(st.session_state.watchlist_stocks)
+        #st.write(dataframe)
 
 
-st.sidebar.text("")
-st.sidebar.title("Watchlist") #st.sidebar puts widgets and texts in a sidebar on your page
+elif page == "Analysis":
+    
+    st.warning("This page is currently under construction")    
 
-watchstock = st.sidebar.text_input("Enter a stock to add to watchlist")
-st.session_state.watchlist_stocks.append(watchstock)
-selected_watch_stock = st.sidebar.selectbox("View a stock", st.session_state.watchlist_stocks[1:])
-#A button when clicked that clears the watchlist
-result = st.sidebar.button("Click to clear your watchlist")
-if result:
-    for key in st.session_state.keys(): #deletes all the keys saved in session_state
-            del st.session_state[key]
+
+
+
+
+        
+        
+
+
 
 

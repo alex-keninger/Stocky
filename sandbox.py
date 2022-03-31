@@ -5,6 +5,9 @@ import pandas as pd
 st.title("Streamlit Testing Sandbox")
 st.write("") #blank space
 
+downloadstuff = st.selectbox("How far would you like to look back?", ["1", "2", "3"])
+st.download_button('Download CSV', downloadstuff)
+
 
 #example dataframe (table) with random numbers
 st.write("Dataframe")
