@@ -6,7 +6,6 @@ import pandas as pd # imports panda library and changes its reference to pd
 import yfinance as yf
 from plotly import graph_objs as go
 
-
 START = "2015-01-01"
 TODAY = date.today().strftime("%Y-%m-%d")
 
@@ -14,13 +13,17 @@ watchlist_stocks = []
 
 if 'watchlist_stocks' not in st.session_state:  #initializes the session state for saving watchlist variables
     st.session_state.watchlist_stocks = []
-
+if 'selected_stock' not in st.session_state:
+    st.session_state.selected_stock = ''
 
 page_names = ["Home", "Watchlist", "Analysis"]
 page = st.sidebar.radio('Navigation', page_names)
 
+
+
 try:
     if page == "Home":
+        
         st.write("""
         # CS 460 Stock Analysis Web App
         # Hello!
@@ -33,9 +36,13 @@ try:
         
         st.title("Stock Analyzer Test")
 
-        #stocks = ("APRE","AAPL", "GOOG", "MSFT", "GME")
-        selected_stocks = st.text_input("Input stock")
-        if selected_stocks == "": #displays info box when no ticker is entered
+        input = st.text_input("Input stock")
+        search_stock = st.checkbox("Check to search for stock")
+        if search_stock:
+            st.session_state.selected_stock = input
+            st.warning("If you are done searching for this stock, make sure to uncheck the box above")
+        
+        if st.session_state.selected_stock == "": #displays info box when no ticker is entered
             st.info("Enter your ticker in the box above")
 
         @st.cache #caches the data, doesnt need to run this code again if stock has been cached
@@ -44,11 +51,11 @@ try:
             data.reset_index(inplace=True)
             return data
 
-        if selected_stocks == "":
+        if st.session_state.selected_stock == '':
             data = load_data("AAPL")
             st.warning("Currently showing data for AAPL. Try inputing your own ticker!")
         else:
-            data = load_data(selected_stocks)
+            data = load_data(st.session_state.selected_stock)
 
         while True: #Catchs invalid tickers and produces an error message
             try: 
@@ -79,14 +86,21 @@ try:
             #creates a table with data entries from yahoo finance
             # tail cuts off the last entries determined by the DateRange
 
+        if st.session_state.selected_stock == "": #title that shows the current stock
+            st.title("Currently viewing data for...")
+            st.title("AAPL")
+        else:
+            st.title("Currently viewing data for...")
+            st.title(st.session_state.selected_stock)
+
         def plot_raw_data(): #configures and creates plot.ly graph, could also look into matplotlib graph
             fig = go.Figure()
             fig.add_trace(go.Scatter(x= data['Date'], y=data['Open'], name='stock_open'))
             fig.add_trace(go.Scatter(x= data['Date'], y=data['Close'], name='stock_close'))
             fig.layout.update(title_text="Time Series Data", xaxis_rangeslider_visible=True)
             st.plotly_chart(fig) #creates the plotly graph integrated with streamlit
-
-        plot_raw_data()
+        
+        plot_raw_data() #plots the graph
 
     elif page == "Watchlist":
         
@@ -99,10 +113,11 @@ try:
             st.session_state.watchlist_stocks.append(watchstock)
             st.warning("If you are done adding your stock, make sure to uncheck the box above")
 
-        selected_watch_stock = st.selectbox("View a stock", st.session_state.watchlist_stocks) 
+        selected_watch_stock = st.selectbox("Current Watchlist", st.session_state.watchlist_stocks) 
 
 
         #A button when clicked that clears the watchlist
+        ###Problem here probably has to do with the 'keys' session state not being defined
         st.title("")
         result = st.button("Click to clear your watchlist")
         if result:
@@ -145,10 +160,15 @@ try:
         st.warning("This page is currently under construction")    
 
 
-    st.sidebar.selectbox("Current watchlist", st.session_state.watchlist_stocks)
+    watchstockview = st.sidebar.selectbox("Current watchlist", st.session_state.watchlist_stocks)
+    search = st.sidebar.button("Click to search for selected stock")  
 
+    if search:
+        st.session_state.selected_stock = watchstockview
+        st.sidebar.text("(May need to click button twice)") 
+        
 except AttributeError:
-    st.warning("You are about to clear your watchlist. Click the button belwo to confirm.")
+    st.warning("You are about to clear your watchlist. Click the button below to confirm.")
     st.button("Confirm?")
 
 
