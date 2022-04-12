@@ -125,8 +125,6 @@ try:
                     del st.session_state[key]
 
 
-        
-
         #Downloads watchlist to a text file
         st.title("")
         st.download_button('Download your watchlist', str(st.session_state.watchlist_stocks))
@@ -137,23 +135,28 @@ try:
         if uploaded_file is not None:
             # To read file as bytes:
             bytes_data = uploaded_file.getvalue()
-            st.write(bytes_data)
+            #st.write(bytes_data)
 
             # To convert to a string based IO:
             stringio = StringIO(uploaded_file.getvalue().decode("utf-8"))
-            st.write(stringio)
+            #st.write(stringio)
 
             # To read file as string:
             string_data = stringio.read()
-            st.write(string_data)
+            #st.write(string_data)
 
             # Can be used wherever a "file-like" object is accepted:
             uploaded_watchlist = pd.read_csv(uploaded_file)
             for i in uploaded_watchlist:
                 i = ''.join(filter(str.isalnum, i)) #ensures only the letters for the ticker are used
                 st.session_state.watchlist_stocks.append(i)
-            st.write(st.session_state.watchlist_stocks)
-
+            st.warning("""While this feature does upload an existing watchlist, a certain bug
+                            may cause the app to freeze. 
+                            
+                            If this occurs, please refresh the page. """)
+            
+            
+            
 
     elif page == "Analysis":
         
