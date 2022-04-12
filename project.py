@@ -12,7 +12,6 @@ TODAY = date.today().strftime("%Y-%m-%d")
 
 watchlist_stocks = []
 
-"st.session_state object", st.session_state
 if 'watchlist_stocks' not in st.session_state:  #initializes the session state for saving watchlist variables
     st.session_state.watchlist_stocks = []
 
@@ -139,7 +138,6 @@ try:
                 i = ''.join(filter(str.isalnum, i)) #ensures only the letters for the ticker are used
                 st.session_state.watchlist_stocks.append(i)
             st.write(st.session_state.watchlist_stocks)
-        st.button("test")
 
 
     elif page == "Analysis":
@@ -147,7 +145,7 @@ try:
         st.warning("This page is currently under construction")    
 
 
-    st.sidebar.selectbox("Current watchlist", st.session_state.watchlist_stocks[1:])
+    st.sidebar.selectbox("Current watchlist", st.session_state.watchlist_stocks)
 
 except AttributeError:
     st.warning("You are about to clear your watchlist. Click the button belwo to confirm.")
